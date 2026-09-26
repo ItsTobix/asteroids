@@ -28,8 +28,8 @@ def main():
     Shot.containers = (updatable, drawable, shots)
     AsteroidField.containers = updatable
 
+    AsteroidField()
 
-    asteroid_field = AsteroidField()
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
     while True:
@@ -52,7 +52,6 @@ def main():
                     log_event("asteroid_shot")
                     asteroid.split()
                     shot.kill()
-
 
         for drawables in drawable:
             drawables.draw(screen)
