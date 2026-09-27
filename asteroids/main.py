@@ -49,7 +49,7 @@ def main():
             if asteroid.collides_with(player):
                 log_event("player_hit")
                 print("Game over!")
-                print("Your Score was: ", score.score)
+                print("Your Score was:", score.score)
                 sys.exit()
 
             for shot in shots:
@@ -62,7 +62,7 @@ def main():
         for drawables in drawable:
             drawables.draw(screen)
 
-        score.update_score(screen)
+        score.update_score()
 
         pygame.display.flip()
         dt = clock.tick(60) / 1000
