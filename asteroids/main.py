@@ -3,19 +3,23 @@ import sys
 import pygame
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
-from constants import SCREEN_HEIGHT, SCREEN_WIDTH
+from constants import (
+    BUTTON_LEFT,
+    BUTTON_TOP,
+    SCREEN_HEIGHT,
+    SCREEN_WIDTH,
+)
 from logger import log_event, log_state
 from player import Player
 from score import Score
 from shot import Shot
 
+print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
+print(f"Screen width: {SCREEN_WIDTH}\nScreen height: {SCREEN_HEIGHT}")
 
-def main():
-    print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
-    print(f"Screen width: {SCREEN_WIDTH}\nScreen height: {SCREEN_HEIGHT}")
-    pygame.init()
 
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+def game(screen):
+
     clock = pygame.time.Clock()
     dt = 0.0
 
@@ -50,7 +54,7 @@ def main():
                 log_event("player_hit")
                 print("Game over!")
                 print("Your Score was:", score.score)
-                sys.exit()
+                start_menu(screen)
 
             for shot in shots:
                 if asteroid.collides_with(shot):
@@ -66,6 +70,64 @@ def main():
 
         pygame.display.flip()
         dt = clock.tick(60) / 1000
+
+
+def start_menu(screen):
+    pygame.font.init()
+    menu_font = pygame.font.Font(None, 50)
+    while True:
+        screen.fill("black")
+        mouse = pygame.mouse.get_pos()
+
+        play_button = pygame.Rect(
+            BUTTON_LEFT,
+            BUTTON_TOP,
+            140,
+            50,
+        )
+
+        quit_button = pygame.Rect(
+            BUTTON_LEFT,
+            BUTTON_TOP + 50,
+            140,
+            50,
+        )
+
+        # play_button = pygame.Rect(300, 300, 140, 50)
+        # quit_button = pygame.Rect(300, 380, 140, 50)
+
+        pygame.draw.rect(
+            screen, "Grey" if play_button.collidepoint(mouse) else "Black", play_button
+        )
+        pygame.draw.rect(
+            screen, "Grey" if quit_button.collidepoint(mouse) else "Black", quit_button
+        )
+
+        play_text = menu_font.render("Play", True, "White")
+        quit_text = menu_font.render("Quit", True, "White")
+
+        screen.blit(play_text, (BUTTON_LEFT + 30, BUTTON_TOP + 10))
+        screen.blit(quit_text, (BUTTON_LEFT + 30, BUTTON_TOP + 60))
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if play_button.collidepoint(mouse):
+                    game(screen)
+                if quit_button.collidepoint(mouse):
+                    pygame.quit()
+                    sys.exit()
+
+        pygame.display.update()
+
+
+def main():
+    pygame.init()
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    start_menu(screen)
 
 
 if __name__ == "__main__":
