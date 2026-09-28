@@ -22,3 +22,6 @@ class Score:
             f"Score: {self.score}", True, (255, 255, 255)
         )
         self.screen.blit(self.score_text, (10, 10))
+
+    def get_score(self):
+        return self.score

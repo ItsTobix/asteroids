@@ -17,7 +17,6 @@ from shot import Shot
 print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
 print(f"Screen width: {SCREEN_WIDTH}\nScreen height: {SCREEN_HEIGHT}")
 
-
 def game(screen):
 
     clock = pygame.time.Clock()
@@ -54,7 +53,8 @@ def game(screen):
                 log_event("player_hit")
                 print("Game over!")
                 print("Your Score was:", score.score)
-                start_menu(screen)
+                high_score = score.get_score()
+                start_menu(screen, high_score)
 
             for shot in shots:
                 if asteroid.collides_with(shot):
@@ -72,7 +72,7 @@ def game(screen):
         dt = clock.tick(60) / 1000
 
 
-def start_menu(screen):
+def start_menu(screen, high_score: int = 0):
     pygame.font.init()
     menu_font = pygame.font.Font(None, 50)
     while True:
@@ -93,8 +93,6 @@ def start_menu(screen):
             50,
         )
 
-        # play_button = pygame.Rect(300, 300, 140, 50)
-        # quit_button = pygame.Rect(300, 380, 140, 50)
 
         pygame.draw.rect(
             screen, "Grey" if play_button.collidepoint(mouse) else "Black", play_button
@@ -108,6 +106,12 @@ def start_menu(screen):
 
         screen.blit(play_text, (BUTTON_LEFT + 30, BUTTON_TOP + 10))
         screen.blit(quit_text, (BUTTON_LEFT + 30, BUTTON_TOP + 60))
+
+
+        # HIGH SCORE
+        if high_score != 0:
+            high_score_text = menu_font.render(f"Score: {high_score}", True, "White")
+            screen.blit(high_score_text, (BUTTON_LEFT-20, BUTTON_TOP- 100))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
